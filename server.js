@@ -38,6 +38,13 @@ app.post("/upload", async (req, res) => {
 
     const { image } = req.body;
 
+    if (!image) {
+      return res.status(400).json({
+        success: false,
+        message: "No image provided",
+      });
+    }
+
     const uploadedImage = await cloudinary.uploader.upload(image, {
 
       folder: "jasmin_portfolio",
@@ -54,13 +61,13 @@ app.post("/upload", async (req, res) => {
 
   } catch (error) {
 
-    console.log(error);
+    console.error("Upload error:", error.message);
 
     res.status(500).json({
 
       success: false,
 
-      message: "Upload Failed",
+      message: error.message || "Upload Failed",
 
     });
   }
